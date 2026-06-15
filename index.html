@@ -1242,6 +1242,14 @@ R.FCSG=CSG;})(window);
 
 <!-- RIGHT PANEL -->
 <div id="panel-toggle" title="Toggle Panel">◀</div>
+
+<!-- Lock / Copy / Del — FIXED outside panel, always visible -->
+<div id="obj-actions-bar" style="position:fixed;top:46px;right:0;z-index:45;display:flex;gap:3px;padding:4px 6px;background:rgba(28,26,40,0.92);backdrop-filter:blur(8px);border-left:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);border-radius:0 0 0 8px;">
+  <button id="btn-outliner-lock" title="Lock / Unlock" style="display:flex;align-items:center;justify-content:center;gap:3px;height:26px;padding:0 8px;border-radius:5px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);cursor:pointer;color:var(--muted);font-size:9px;font-weight:600;transition:.13s;">🔒 Lock</button>
+  <button id="btn-dup" title="Duplicate" style="display:flex;align-items:center;justify-content:center;gap:3px;height:26px;padding:0 8px;border-radius:5px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);cursor:pointer;color:var(--muted);font-size:9px;font-weight:600;transition:.13s;">📋 Copy</button>
+  <button id="btn-del" title="Delete" style="display:flex;align-items:center;justify-content:center;gap:3px;height:26px;padding:0 8px;border-radius:5px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);cursor:pointer;color:#f87171;font-size:9px;font-weight:600;transition:.13s;">🗑️ Del</button>
+</div>
+
 <div id="right-panel">
   <div class="panel-box glass" id="prop-panel" style="display:none;">
     <div class="panel-title">📐 Transform</div>
@@ -1249,59 +1257,22 @@ R.FCSG=CSG;})(window);
     <div class="prop-row"><span class="prop-label">Rot</span><div class="prop-inputs"><input type="number" id="rX" step="1"><input type="number" id="rY" step="1"><input type="number" id="rZ" step="1"></div></div>
     <div class="prop-row"><span class="prop-label">Scl</span><div class="prop-inputs"><input type="number" id="sX" step="0.1"><input type="number" id="sY" step="0.1"><input type="number" id="sZ" step="0.1"></div></div>
   </div>
-  <!-- OPACITY SLIDER — selected object ki transparency -->
   <div class="panel-box glass" id="opacity-panel" style="display:none;">
     <div class="panel-title">💧 Opacity</div>
     <div style="display:flex;align-items:center;gap:6px;">
-      <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="1"
-        style="flex:1;accent-color:#7c3aed;height:3px;">
+      <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="1" style="flex:1;accent-color:#7c3aed;height:3px;">
       <span id="opacity-val" style="font-size:9px;color:var(--muted);min-width:24px;text-align:right;">100%</span>
     </div>
   </div>
 
-  <!-- CAMERA BOOKMARKS -->
+  <!-- OUTLINER PANEL -->
   <div class="panel-box glass">
-    <div class="panel-title">📷 Cam Bookmarks</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:3px;margin-bottom:4px;" id="cam-bookmark-btns">
-      <button class="cam-bm-btn" data-slot="0" title="Bookmark 1">1</button>
-      <button class="cam-bm-btn" data-slot="1" title="Bookmark 2">2</button>
-      <button class="cam-bm-btn" data-slot="2" title="Bookmark 3">3</button>
-      <button class="cam-bm-btn" data-slot="3" title="Bookmark 4">4</button>
-      <button class="cam-bm-btn" data-slot="4" title="Bookmark 5">5</button>
+    <div class="panel-title">📋 Outliner</div>
+    <div id="obj-btn-row1" style="display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:5px;">
+      <button id="btn-outliner-group" title="Group Selected" style="display:flex;align-items:center;justify-content:center;gap:4px;height:24px;border-radius:5px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);color:#c4b5fd;font-size:9px;font-weight:700;cursor:pointer;transition:.13s;">📁 Group</button>
+      <button id="btn-exit-group" title="Exit Group" style="display:none;align-items:center;justify-content:center;gap:4px;height:24px;border-radius:5px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;font-size:9px;font-weight:700;cursor:pointer;transition:.13s;">🚪 Exit Group</button>
     </div>
-    <div style="display:flex;gap:3px;">
-      <button id="btn-save-bm" style="flex:1;padding:3px 0;font-size:8px;font-weight:700;color:#a78bfa;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.35);border-radius:4px;cursor:pointer;transition:.13s;">💾 Save</button>
-      <button id="btn-recall-bm" style="flex:1;padding:3px 0;font-size:8px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--border-subtle);border-radius:4px;cursor:pointer;transition:.13s;">📷 Go</button>
-    </div>
-  </div>
-
-    <!-- Row 1: Group + Exit (full-width, equal size) -->
-    <div id="obj-btn-row1" style="display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:4px;">
-      <button id="btn-outliner-group" title="Group Selected" style="display:flex;align-items:center;justify-content:center;gap:4px;height:24px;border-radius:5px;background:rgba(124,58,237,.25);border:1px solid rgba(124,58,237,.5);color:#c4b5fd;font-size:9px;font-weight:700;cursor:pointer;transition:.13s;letter-spacing:.2px;">
-        📁 Group
-      </button>
-      <button id="btn-exit-group" title="Exit Group" style="display:none;align-items:center;justify-content:center;gap:4px;height:24px;border-radius:5px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;font-size:9px;font-weight:700;cursor:pointer;transition:.13s;letter-spacing:.2px;">
-        🚪 Exit
-      </button>
-    </div>
-
-    <!-- Row 2: Lock + Duplicate + Delete (equal icon buttons) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px;">
-      <button id="btn-outliner-lock" title="Lock / Unlock" style="display:flex;align-items:center;justify-content:center;gap:3px;height:24px;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);cursor:pointer;color:var(--muted);font-size:8.5px;font-weight:600;transition:.13s;">
-        🔒 Lock
-      </button>
-      <button id="btn-dup" title="Duplicate" style="display:flex;align-items:center;justify-content:center;gap:3px;height:24px;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);cursor:pointer;color:var(--muted);font-size:8.5px;font-weight:600;transition:.13s;">
-        📋 Copy
-      </button>
-      <button id="btn-del" title="Delete" style="display:flex;align-items:center;justify-content:center;gap:3px;height:24px;border-radius:5px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);cursor:pointer;color:#f87171;font-size:8.5px;font-weight:600;transition:.13s;">
-        🗑️ Del
-      </button>
-    </div>
-
-    <!-- Group hint bar -->
-    <div id="group-hint" style="display:none;font-size:9px;color:#a78bfa;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);border-radius:5px;padding:4px 8px;margin-bottom:5px;text-align:center;">
-      📁 Group selected — tap Exit to deselect
-    </div>
+    <div id="group-hint" style="display:none;font-size:9px;color:#a78bfa;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);border-radius:5px;padding:4px 8px;margin-bottom:5px;text-align:center;">📁 Group selected — tap Exit to deselect</div>
     <div id="outliner-list"></div>
   </div>
 </div>
@@ -1325,7 +1296,7 @@ R.FCSG=CSG;})(window);
   <div class="menu-item" data-shape="floor">🟩 Floor</div>
 </div>
 
-<div class="popup glass" id="mat-menu" style="left:48px;top:256px;max-height:70vh;overflow-y:auto;width:190px;">
+<div class="popup glass" id="mat-menu" style="left:48px;top:256px;overflow-y:auto;width:190px;">
   <div class="menu-sec">⚙️ Metals</div>
   <div class="menu-item" data-tex="chrome">🔘 Chrome</div>
   <div class="menu-item" data-tex="gold">✨ Gold</div>
@@ -1360,7 +1331,7 @@ R.FCSG=CSG;})(window);
   <div class="menu-item" data-tex="green">🟢 Green</div>
 </div>
 
-<div class="popup glass" id="cam-menu" style="left:48px;top:290px;max-height:70vh;overflow-y:auto;">
+<div class="popup glass" id="cam-menu" style="left:48px;top:290px;overflow-y:auto;">
   <div class="menu-sec">Camera Views</div>
   <div class="menu-item" id="cam-top">⬆️ Top</div>
   <div class="menu-item" id="cam-bottom">⬇️ Bottom</div>
@@ -1375,6 +1346,19 @@ R.FCSG=CSG;})(window);
   <div class="menu-item" id="cam-iso2">💠 Back-Left</div>
   <div class="menu-item" id="cam-iso3">💠 Front-Left</div>
   <div class="menu-item" id="cam-iso4">💠 Back-Right</div>
+  <div class="menu-div"></div>
+  <div class="menu-sec">📷 Cam Bookmarks</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:4px 8px;" id="cam-bookmark-btns">
+    <button class="cam-bm-btn" data-slot="0">1</button>
+    <button class="cam-bm-btn" data-slot="1">2</button>
+    <button class="cam-bm-btn" data-slot="2">3</button>
+    <button class="cam-bm-btn" data-slot="3">4</button>
+    <button class="cam-bm-btn" data-slot="4">5</button>
+  </div>
+  <div style="display:flex;gap:4px;padding:4px 8px 6px;">
+    <button id="btn-save-bm" style="flex:1;padding:5px 0;font-size:9px;font-weight:700;color:#a78bfa;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.35);border-radius:4px;cursor:pointer;">💾 Save</button>
+    <button id="btn-recall-bm" style="flex:1;padding:5px 0;font-size:9px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--border-subtle);border-radius:4px;cursor:pointer;">📷 Go</button>
+  </div>
 </div>
 
 <div class="popup glass" id="pro-menu" style="left:48px;top:324px;">
@@ -1798,11 +1782,10 @@ scene.add(tControl);
   // TransformControls ka internal _getPointer function override karo
   // Taake woh safeZone ke relative coords return kare, full canvas nahi
   tc._getPointer = function(event){
-    var sz = renderer._safeZone || {x:0, y:0, w:dom.offsetWidth, h:dom.offsetHeight};
     var pointer = event.changedTouches ? event.changedTouches[0] : event;
     return {
-      x:  ((pointer.clientX - sz.x) / sz.w) * 2 - 1,
-      y: -((pointer.clientY - sz.y) / sz.h) * 2 + 1,
+      x:  (pointer.clientX / window.innerWidth)  * 2 - 1,
+      y: -(pointer.clientY / window.innerHeight) * 2 + 1,
       button: event.button !== undefined ? event.button : 0
     };
   };
@@ -1937,96 +1920,76 @@ const FPS=30;
 let history=[], histIdx=-1;
 
 function serializeScene(){
-  return objects.map(o=>{
-    const entry={
-      name:o.name,
-      pos:o.position.toArray(),
-      rot:[o.rotation.x,o.rotation.y,o.rotation.z],
-      scl:o.scale.toArray(),
-      vis:o.visible,
-      locked:o.userData.locked||false,
-      kf:o.userData.keyframes||[],
-      // Serialize mesh children colors for restore
-      meshColors:[]
-    };
-    o.traverse(c=>{
-      if(c.isMesh&&c.material&&c.material.color){
-        entry.meshColors.push({
-          uuid:c.uuid,
-          color:'#'+c.material.color.getHexString(),
-          rough:c.material.roughness,
-          metal:c.material.metalness,
-          emissive:c.material.emissive?'#'+c.material.emissive.getHexString():'#000000',
-          emissiveInt:c.material.emissiveIntensity||0,
-          transparent:c.material.transparent||false,
-          opacity:c.material.opacity||1,
-          wire:c.material.wireframe||false
-        });
-      }
-    });
-    return entry;
-  });
+  return objects.map(o => ({
+    ref:    o,                           // direct reference — no JSON needed for existing
+    name:   o.name,
+    pos:    o.position.toArray(),
+    rot:    [o.rotation.x, o.rotation.y, o.rotation.z],
+    scl:    o.scale.toArray(),
+    vis:    o.visible,
+    locked: o.userData.locked  || false,
+    kf:     JSON.parse(JSON.stringify(o.userData.keyframes || []))
+  }));
 }
 
+function loadState(idx){
+  if(idx < 0 || idx >= history.length) return;
+  const snap    = history[idx];
+  const isUndo  = idx < histIdx;
+  
+  tControl.detach();
+  const wasSelected = selectedObj;
+  selectedObj = null;
+
+  const snapRefs = snap.map(s => s.ref);
+
+  objects.filter(o => !snapRefs.includes(o)).forEach(o => scene.remove(o));
+  objects = snapRefs.filter(o => o); 
+
+  snap.forEach(s => {
+    if(!scene.children.includes(s.ref)) scene.add(s.ref);
+    s.ref.position.fromArray(s.pos);
+    s.ref.rotation.set(s.rot[0], s.rot[1], s.rot[2]);
+    s.ref.scale.fromArray(s.scl);
+    
+    s.ref.updateMatrix();
+    s.ref.updateMatrixWorld(true);
+    
+    s.ref.visible  = s.vis;
+    s.ref.userData.locked     = s.locked;
+    s.ref.userData.keyframes  = s.kf;
+  });
+
+  histIdx = idx;
+  updateOutliner();
+  
+  if (wasSelected && objects.includes(wasSelected)) {
+    selectObj(wasSelected);
+  } else {
+    selectObj(null);
+  }
+
+  updatePropsUI();
+  updateUndoRedoBtns();
+  showStatus(isUndo ? '↩️ Undo' : '↪️ Redo');
+}
+
+
 function saveState(){
-  if(histIdx < history.length-1) history=history.slice(0,histIdx+1);
+  if(histIdx < history.length - 1) history = history.slice(0, histIdx + 1);
   history.push(serializeScene());
   histIdx++;
-  if(history.length>60){history.shift();histIdx--;}
+  if(history.length > 50){ history.shift(); histIdx--; }
   updateUndoRedoBtns();
 }
 
 function updateUndoRedoBtns(){
-  el('btn-undo').style.opacity=histIdx>0?'1':'0.3';
-  el('btn-redo').style.opacity=histIdx<history.length-1?'1':'0.3';
+  el('btn-undo').style.opacity = histIdx > 0               ? '1' : '0.3';
+  el('btn-redo').style.opacity = histIdx < history.length-1 ? '1' : '0.3';
 }
 
-function loadState(idx){
-  if(idx<0||idx>=history.length) return;
-  const snap=history[idx];
-  // Restore positions/rotations/scales/visibility for existing objects
-  snap.forEach(s=>{
-    const o=objects.find(x=>x.name===s.name);
-    if(o){
-      o.position.fromArray(s.pos);
-      o.rotation.set(s.rot[0],s.rot[1],s.rot[2]);
-      o.scale.fromArray(s.scl);
-      o.visible=s.vis;
-      o.userData.locked=s.locked;
-      o.userData.keyframes=s.kf;
-      // Restore mesh colors
-      if(s.meshColors&&s.meshColors.length){
-        o.traverse(c=>{
-          if(c.isMesh&&c.material){
-            const mc=s.meshColors.find(m=>m.uuid===c.uuid);
-            if(mc){
-              c.material.color.set(mc.color);
-              c.material.roughness=mc.rough;
-              c.material.metalness=mc.metal;
-              if(c.material.emissive) c.material.emissive.set(mc.emissive);
-              c.material.emissiveIntensity=mc.emissiveInt;
-              c.material.transparent=mc.transparent;
-              c.material.opacity=mc.opacity;
-              c.material.wireframe=mc.wire;
-              c.material.needsUpdate=true;
-            }
-          }
-        });
-      }
-    }
-  });
-  // Remove objects not in snap (undo add)
-  const snapNames=snap.map(s=>s.name);
-  const toRemove=objects.filter(o=>!snapNames.includes(o.name));
-  toRemove.forEach(o=>{ scene.remove(o); if(selectedObj===o) selectObj(null); });
-  objects=objects.filter(o=>snapNames.includes(o.name));
-  histIdx=idx;
-  updateOutliner(); updatePropsUI(); updateUndoRedoBtns();
-  showStatus(idx<histIdx+1?'↩ Undo':'↪ Redo');
-}
-
-el('btn-undo').onclick=()=>{ loadState(histIdx-1); };
-el('btn-redo').onclick=()=>{ loadState(histIdx+1); };
+el('btn-undo').onclick = e => { e.stopPropagation(); loadState(histIdx - 1); };
+el('btn-redo').onclick = e => { e.stopPropagation(); loadState(histIdx + 1); };
 
 // Keyboard shortcuts
 window.addEventListener('keydown', e=>{
@@ -3468,8 +3431,22 @@ el('btn-outliner-lock').onclick=e=>{
 };
 
 // Del/Dup
-el('btn-del').onclick=e=>{ e.stopPropagation(); if(selectedObj){scene.remove(selectedObj);objects=objects.filter(o=>o!==selectedObj);selectObj(null);saveState();showStatus('🗑️ Deleted');} };
+el('btn-del').onclick=e=>{
+  e.stopPropagation();
+  if(selectedObj){
+    tControl.detach();
+    scene.remove(selectedObj);
+    objects=objects.filter(o=>o!==selectedObj);
+    selectedObj=null;
+    selectObj(null);
+    updateOutliner();
+    saveState();
+    showStatus('🗑️ Deleted');
+  }
+};
 el('btn-dup').onclick=e=>{ e.stopPropagation(); if(selectedObj){ const cl=selectedObj.clone();cl.position.x+=1.5;cl.name=selectedObj.name+' Copy';cl.userData={keyframes:[]}; if(cl.isMesh){cl.material=cl.material.clone();cl.geometry=cl.geometry.clone();} scene.add(cl);objects.push(cl);selectObj(cl);saveState(); } };
+
+// Cam Bookmarks accordion — removed (moved to cam-menu popup)
 
 // Pro tools
 function focusObj(){
@@ -3645,9 +3622,8 @@ el('btn-multisel').onclick=()=>{ multiMode?exitMultiMode():enterMultiMode(); clo
 renderer.domElement.addEventListener('pointerup', e=>{
   if(!multiMode||gizmoActive||isDragging) return;
   if(Math.abs(e.clientX-ptDown.x)>8||Math.abs(e.clientY-ptDown.y)>8) return;
-  const sz = renderer._safeZone || {x:0,y:0,w:window.innerWidth,h:window.innerHeight};
-  mouse.x = ((e.clientX - sz.x) / sz.w) * 2 - 1;
-  mouse.y = -((e.clientY - sz.y) / sz.h) * 2 + 1;
+  mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   ray.setFromCamera(mouse,camera);
   const hits=ray.intersectObjects(objects,true);
   if(hits.length>0){
@@ -3716,6 +3692,11 @@ let panelVis=true;
 function updatePanelTogglePos(){
   const rpW = el('right-panel').getBoundingClientRect().width || 160;
   el('panel-toggle').style.right = panelVis ? (rpW+12)+'px' : '8px';
+  // Keep actions bar always on top-right edge of panel (or screen edge if panel hidden)
+  const actBar = document.getElementById('obj-actions-bar');
+  if(actBar){
+    actBar.style.right = '0';
+  }
 }
 el('panel-toggle').onclick=()=>{
   panelVis=!panelVis;
@@ -3739,10 +3720,9 @@ renderer.domElement.addEventListener('pointerdown', e=>{
 renderer.domElement.addEventListener('pointerup', e=>{
   if(gizmoActive||isDragging) return;
   if(Math.abs(e.clientX-ptDown.x)>8||Math.abs(e.clientY-ptDown.y)>8) return;
-  // Use safe-zone viewport for correct NDC mapping
-  const sz = renderer._safeZone || {x:0,y:0,w:window.innerWidth,h:window.innerHeight};
-  mouse.x = ((e.clientX - sz.x) / sz.w) * 2 - 1;
-  mouse.y = -((e.clientY - sz.y) / sz.h) * 2 + 1;
+  // Full window NDC — no safeZone offset needed (scissor removed, camera = full W/H)
+  mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   ray.setFromCamera(mouse,camera);
   const rayTargets=activeGroup?[...activeGroup.children]:objects;
   const hits=ray.intersectObjects(rayTargets,true);
@@ -4314,122 +4294,82 @@ el('imp-json-file').onchange=e=>{
 // they stay centered inside that safe zone and never overlap the
 // left/right toolbars or run off-screen.
 function onResize(){
-  // visualViewport gives real visible area on mobile (excludes browser chrome)
-  // Falls back to innerWidth/innerHeight on desktop
   const vv = window.visualViewport;
   const W = vv ? Math.round(vv.width)  : window.innerWidth;
   const H = vv ? Math.round(vv.height) : window.innerHeight;
 
-  // Canvas covers the full visible viewport
-  renderer.domElement.style.width  = W + 'px';
-  renderer.domElement.style.height = H + 'px';
-  renderer.setSize(W, H, false); // false = don't set CSS style (we set it above)
+  renderer.setSize(W, H);
 
-  // ── Measure live UI element heights/widths ──
-  const topbarEl     = document.getElementById('topbar');
-  const leftToolsEl  = document.getElementById('left-tools');
-  const animPanelEl  = document.getElementById('anim-panel');
-  const bottomModes  = document.getElementById('bottom-modes');
-  const rightPanelEl = document.getElementById('right-panel');
+  // Full canvas render — no scissor/viewport clipping
+  // UI panels (topbar, left toolbar, right panel) are CSS overlays on top
+  renderer.setScissorTest(false);
+  renderer.setViewport(0, 0, W, H);
 
-  const topH    = topbarEl    ? (topbarEl.offsetHeight    + 4) : 40;
-  const leftW   = leftToolsEl ? (leftToolsEl.offsetLeft   + leftToolsEl.offsetWidth + 6) : 44;
-
-  const isLandscape = document.body.classList.contains('ui-landscape');
-
-  // Right panel clearance — only when it's actually visible
-  let rightW = 0;
-  if (rightPanelEl && !rightPanelEl.classList.contains('hidden') && rightPanelEl.offsetWidth > 0) {
-    const rpRect = rightPanelEl.getBoundingClientRect();
-    rightW = Math.max(0, (W - rpRect.left) + 6);
-  }
-
-  // Bottom clearance: animation panel (when open) OR the floating bottom bar
-  let botH = 0;
-  if (animPanelEl && animPanelEl.style.display !== 'none' && animPanelEl.offsetHeight > 0) {
-    botH = animPanelEl.offsetHeight + (isLandscape ? 8 : 0) + 4;
-  } else if (bottomModes && bottomModes.offsetHeight > 0) {
-    // bottom-modes is position:fixed bottom:10px — clear its full footprint
-    botH = bottomModes.offsetHeight + 10 + 6;
-  } else {
-    botH = 44; // safe fallback
-  }
-
-  // Safe viewport rectangle (CSS pixels, origin = top-left)
-  const vpX = leftW;
-  const vpY = topH;
-  const vpW = Math.max(1, W - leftW - rightW);
-  const vpH = Math.max(1, H - topH - botH);
-
-  // Three.js setViewport / setScissor use bottom-left origin → flip Y
-  const vpBottom = H - vpY - vpH;
-
-  renderer.setViewport(vpX, vpBottom, vpW, vpH);
-  renderer.setScissor (vpX, vpBottom, vpW, vpH);
-  renderer.setScissorTest(true);
-
-  // Camera must use the safe-zone aspect, not full-window aspect
-  camera.aspect = vpW / vpH;
+  // Camera aspect = full window (panels are transparent overlays)
+  camera.aspect = W / H;
   camera.updateProjectionMatrix();
 
-  // Store for raycasting offset correction
-  renderer._safeZone = { x: vpX, y: vpY, w: vpW, h: vpH };
+  // safeZone for raycaster — subtract UI panels so clicks work correctly
+  const topbarEl    = document.getElementById('topbar');
+  const leftToolsEl = document.getElementById('left-tools');
+  const topH  = topbarEl    ? topbarEl.offsetHeight  + 2 : 40;
+  const leftW = leftToolsEl ? leftToolsEl.offsetLeft + leftToolsEl.offsetWidth + 4 : 44;
 
-  // ── Landscape: keep floating chrome inside the safe zone ──
+  renderer._safeZone = { x: leftW, y: topH, w: W - leftW, h: H - topH };
+
+  const isLandscape = document.body.classList.contains('ui-landscape');
   const margin = 8;
-  const toastEl = document.getElementById('status-toast');
+  const animPanelEl = document.getElementById('anim-panel');
+  const bottomModes = document.getElementById('bottom-modes');
+  const rightPanelEl = document.getElementById('right-panel');
 
-  if (isLandscape) {
-    // Left toolbar — scroll inside the available vertical space
-    if (leftToolsEl) {
-      leftToolsEl.style.maxHeight = Math.max(80, H - topH - botH - margin) + 'px';
-    }
-    // Right panel — scroll below topbar, clipped so it can't overlap bottom bar
-    if (rightPanelEl) {
-      rightPanelEl.style.maxHeight = Math.max(80, H - topH - margin) + 'px';
-    }
-    // Bottom mode bar — center within horizontal safe zone using transform
-    if (bottomModes) {
-      const bmCenterX = vpX + vpW / 2;
-      bottomModes.style.left = bmCenterX + 'px';
+  let botH = 0;
+  if(animPanelEl && animPanelEl.style.display !== 'none' && animPanelEl.offsetHeight > 0){
+    botH = animPanelEl.offsetHeight + 4;
+  } else if(bottomModes && bottomModes.offsetHeight > 0){
+    botH = bottomModes.offsetHeight + 16;
+  }
+
+  let rightW = 0;
+  if(rightPanelEl && !rightPanelEl.classList.contains('hidden') && rightPanelEl.offsetWidth > 0){
+    rightW = Math.max(0, W - rightPanelEl.getBoundingClientRect().left + 4);
+  }
+
+  if(isLandscape){
+    if(leftToolsEl)  leftToolsEl.style.maxHeight = Math.max(80, H - topH - botH - margin) + 'px';
+    if(rightPanelEl) rightPanelEl.style.maxHeight = Math.max(80, H - topH - margin) + 'px';
+    if(bottomModes){
+      bottomModes.style.left = ((leftW + (W - leftW - rightW) / 2)) + 'px';
       bottomModes.style.transform = 'translateX(-50%)';
-      bottomModes.style.right = '';
-      bottomModes.style.maxWidth = Math.max(160, vpW - margin * 2) + 'px';
       bottomModes.style.bottom = margin + 'px';
     }
-    // Animation / Timeline bar — span safe zone, never under toolbars
-    if (animPanelEl) {
-      animPanelEl.style.left   = (vpX + margin) + 'px';
-      animPanelEl.style.right  = (rightW + margin) + 'px';
-      animPanelEl.style.width  = 'auto';
+    if(animPanelEl){
+      animPanelEl.style.left  = (leftW + margin) + 'px';
+      animPanelEl.style.right = (rightW + margin) + 'px';
+      animPanelEl.style.width = 'auto';
       animPanelEl.style.bottom = margin + 'px';
     }
-    // Toast — always under topbar, horizontally centered in safe zone
-    if (toastEl) {
-      toastEl.style.left = (vpX + vpW / 2) + 'px';
+    const toastEl = document.getElementById('status-toast');
+    if(toastEl){
+      toastEl.style.left = ((leftW + (W - leftW - rightW) / 2)) + 'px';
       toastEl.style.top  = (topH + 4) + 'px';
       toastEl.style.transform = 'translateX(-50%)';
     }
   } else {
-    // Portrait / default — let the stylesheet rules take back over
-    if (leftToolsEl)  leftToolsEl.style.maxHeight  = '';
-    if (rightPanelEl) rightPanelEl.style.maxHeight = '';
-    if (bottomModes) {
-      bottomModes.style.left      = '50%';
+    if(leftToolsEl)  leftToolsEl.style.maxHeight = '';
+    if(rightPanelEl) rightPanelEl.style.maxHeight = '';
+    if(bottomModes){
+      bottomModes.style.left = '50%';
       bottomModes.style.transform = 'translateX(-50%)';
-      bottomModes.style.right     = '';
-      bottomModes.style.maxWidth  = '';
-      bottomModes.style.bottom    = '10px';
+      bottomModes.style.bottom = '10px';
     }
-    if (animPanelEl) {
-      animPanelEl.style.left   = '';
-      animPanelEl.style.right  = '';
-      animPanelEl.style.width  = '';
-      animPanelEl.style.bottom = '';
+    if(animPanelEl){
+      animPanelEl.style.left = animPanelEl.style.right = animPanelEl.style.width = animPanelEl.style.bottom = '';
     }
-    if (toastEl) {
-      toastEl.style.left      = '50%';
-      toastEl.style.top       = '46px';
+    const toastEl = document.getElementById('status-toast');
+    if(toastEl){
+      toastEl.style.left = '50%';
+      toastEl.style.top = '46px';
       toastEl.style.transform = 'translateX(-50%)';
     }
   }

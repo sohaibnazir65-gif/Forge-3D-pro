@@ -1952,6 +1952,7 @@ function loadState(idx){
     s.ref.rotation.set(s.rot[0], s.rot[1], s.rot[2]);
     s.ref.scale.fromArray(s.scl);
     
+    // YEH LINES ZAROORI HAIN (Jo aapke screenshot mein nahi theen)
     s.ref.updateMatrix();
     s.ref.updateMatrixWorld(true);
     
@@ -1963,6 +1964,7 @@ function loadState(idx){
   histIdx = idx;
   updateOutliner();
   
+  // YEH BHI NAYA HISSA HAI
   if (wasSelected && objects.includes(wasSelected)) {
     selectObj(wasSelected);
   } else {

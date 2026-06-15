@@ -1936,26 +1936,22 @@ function loadState(idx){
   if(idx < 0 || idx >= history.length) return;
   const snap    = history[idx];
   const isUndo  = idx < histIdx;
-  
   tControl.detach();
-  const wasSelected = selectedObj;
   selectedObj = null;
 
+  // Objects that should exist in this snapshot
   const snapRefs = snap.map(s => s.ref);
 
+  // Remove objects not in this snapshot (undo-add)
   objects.filter(o => !snapRefs.includes(o)).forEach(o => scene.remove(o));
-  objects = snapRefs.filter(o => o); 
+  objects = snapRefs.filter(o => o); // restore order from snapshot
 
+  // Add back objects that were removed (undo-delete) and update transforms
   snap.forEach(s => {
     if(!scene.children.includes(s.ref)) scene.add(s.ref);
     s.ref.position.fromArray(s.pos);
     s.ref.rotation.set(s.rot[0], s.rot[1], s.rot[2]);
     s.ref.scale.fromArray(s.scl);
-    
-    // YEH LINES ZAROORI HAIN (Jo aapke screenshot mein nahi theen)
-    s.ref.updateMatrix();
-    s.ref.updateMatrixWorld(true);
-    
     s.ref.visible  = s.vis;
     s.ref.userData.locked     = s.locked;
     s.ref.userData.keyframes  = s.kf;
@@ -1963,19 +1959,10 @@ function loadState(idx){
 
   histIdx = idx;
   updateOutliner();
-  
-  // YEH BHI NAYA HISSA HAI
-  if (wasSelected && objects.includes(wasSelected)) {
-    selectObj(wasSelected);
-  } else {
-    selectObj(null);
-  }
-
   updatePropsUI();
   updateUndoRedoBtns();
   showStatus(isUndo ? '↩️ Undo' : '↪️ Redo');
 }
-
 
 function saveState(){
   if(histIdx < history.length - 1) history = history.slice(0, histIdx + 1);
